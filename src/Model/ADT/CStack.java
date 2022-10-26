@@ -11,6 +11,10 @@ public class CStack<DataType> implements StackInterface<DataType> {
 
     private Stack<DataType> stack;
 
+    public CStack(){
+        this.stack = new Stack<DataType>();
+    }
+
     @Override
     public void push(DataType element) {
         this.stack.push(element);
@@ -31,9 +35,9 @@ public class CStack<DataType> implements StackInterface<DataType> {
 
     @Override
     public List<DataType> getReversed() {
-        var reversed_list = new ArrayList<DataType>(this.stack);
-        Collections.reverse(reversed_list);
-        return reversed_list;
+        var reversedList = new ArrayList<DataType>(this.stack);
+        Collections.reverse(reversedList);
+        return reversedList;
     }
     
 }
