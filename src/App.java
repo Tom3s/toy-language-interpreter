@@ -3,3 +3,6 @@ public class App {
         System.out.println("Hello, World!");
     }
 }
+
+// defaultValue(int) =0
+// defaultValue(bool) = false
