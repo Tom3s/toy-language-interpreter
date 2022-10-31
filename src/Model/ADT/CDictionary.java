@@ -5,7 +5,7 @@ import java.util.Map;
 
 import Model.InterpreterExceptions.DictionaryNoEntryException;
 
-public class CDictionary<Key, Value> implements DictionaryInterface<Key, Value> {
+public class CDictionary<Key, Value> implements GenericDictionary<Key, Value> {
 
     private Map<Key, Value> map;
 
@@ -29,13 +29,38 @@ public class CDictionary<Key, Value> implements DictionaryInterface<Key, Value> 
 
     @Override
     public boolean containsKey(Key key) {
-        // TODO Auto-generated method stub
-        return false;
+        return this.map.containsKey(key);
     }
 
     @Override
-    public void update(Key key, Value newValue) {
-        // TODO Auto-generated method stub
-        
+    public void update(Key key, Value newValue) throws DictionaryNoEntryException {
+        if (!this.containsKey(key)) throw new DictionaryNoEntryException();
+        this.map.put(key, newValue);
     }
+
+    //i implemented this again bc i didn't notice u already had it
+    //it's not even well implemeneted lmao
+    // u welcome :)
+    // @Override
+    // public boolean isVarDef(K key) {
+    //     return this.map.containsKey((key));
+    // }
+    // ty tho :P
+
+    //for the MyStack class u need to add the toString method again, overriding from Object
+    @Override
+    public String toString(){
+        return this.map.toString();
+    }
+    //i did a thing :D
+
 }
+
+
+
+
+
+
+
+
+// secret message

@@ -4,7 +4,7 @@ import java.util.List;
 
 import Model.InterpreterExceptions.EmptyStackException;
 
-public interface StackInterface<DataType> {
+public interface GenericStack<DataType> {
     public void push(DataType element);
     public DataType pop() throws EmptyStackException;
     public boolean isEmpty();

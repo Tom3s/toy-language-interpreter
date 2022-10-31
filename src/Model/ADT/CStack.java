@@ -7,7 +7,7 @@ import java.util.Stack;
 
 import Model.InterpreterExceptions.EmptyStackException;
 
-public class CStack<DataType> implements StackInterface<DataType> {
+public class CStack<DataType> implements GenericStack<DataType> {
 
     private Stack<DataType> stack;
 
