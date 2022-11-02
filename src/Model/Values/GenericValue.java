@@ -1,6 +1,6 @@
-package Model.Value;
+package Model.Values;
 
-import Model.Type.GenericType;
+import Model.Types.GenericType;
 
 public interface GenericValue {
     public GenericType getType();

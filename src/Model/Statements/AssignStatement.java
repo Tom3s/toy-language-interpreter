@@ -4,14 +4,19 @@ import Model.ProgramState;
 import Model.Expressions.GenericExpression;
 import Model.InterpreterExceptions.VariableNotDeclaredException;
 import Model.InterpreterExceptions.VariableTypeMismatchException;
-import Model.Type.GenericType;
-import Model.Value.GenericValue;
+import Model.Types.GenericType;
+import Model.Values.GenericValue;
 
 public class AssignStatement implements GenericStatement {
 
     String id;
     GenericExpression expression;
     
+    public AssignStatement(String id, GenericExpression expression) {
+        this.id = id;
+        this.expression = expression;
+    }
+
     @Override
     public ProgramState execute(ProgramState programState) throws Exception {
         //var executionStack = programState.getExecutionStack();
@@ -29,7 +34,16 @@ public class AssignStatement implements GenericStatement {
         symbolTable.update(this.id, value);
         return programState;
     }
+
     
+    
+    @Override
+    public GenericStatement deepCopy() {
+        return new AssignStatement(new String(this.id), this.expression.deepCopy());
+    }
+
+
+
     @Override
     public String toString() {
         return String.format("%s=%s", this.id.toString(), this.expression.toString());

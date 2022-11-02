@@ -20,6 +20,13 @@ public class CompoundStatement implements GenericStatement {
         return programState;
     }
 
+    
+
+    @Override
+    public GenericStatement deepCopy() {
+        return new CompoundStatement(this.firstStatement.deepCopy(), this.secondStatement.deepCopy());
+    }
+
     @Override
     public String toString() {
         return String.format("(%s;%s)", this.firstStatement.toString(), this.secondStatement.toString());

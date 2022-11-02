@@ -4,7 +4,7 @@ import Model.ADT.GenericDictionary;
 import Model.ADT.GenericList;
 import Model.ADT.GenericStack;
 import Model.Statements.GenericStatement;
-import Model.Value.GenericValue;
+import Model.Values.GenericValue;
 
 public class ProgramState {
     private GenericStack<GenericStatement> executionStack; 
