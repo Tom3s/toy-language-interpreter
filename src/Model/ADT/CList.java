@@ -1,22 +1,31 @@
 package Model.ADT;
 
 import java.util.ArrayList;
-import java.util.List;
+
+import Model.InterpreterExceptions.EmptyListException;
 
 public class CList<DataType> implements GenericList<DataType> {
-    private List<DataType> out;
+    private ArrayList<DataType> list;
     
     public CList(){
-        this.out = new ArrayList<DataType>();
+        this.list = new ArrayList<DataType>();
     }
 
     @Override
     public void add(DataType element) {
-        this.out.add(element);
+        this.list.add(element);
+    }
+
+    @Override
+    public DataType getLast() throws EmptyListException {
+        if (this.list.isEmpty()){
+            throw new EmptyListException();
+        }
+        return this.list.get(this.list.size() - 1);
     }
 
     @Override
     public String toString() {
-        return this.out.toString();
+        return this.list.toString();
     }
 }

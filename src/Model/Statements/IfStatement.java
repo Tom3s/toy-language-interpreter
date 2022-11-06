@@ -2,12 +2,15 @@ package Model.Statements;
 
 import Model.ProgramState;
 import Model.Expressions.GenericExpression;
+import Model.InterpreterExceptions.InvalidConditionExpressionException;
+import Model.Types.BooleanType;
+import Model.Values.BooleanValue;
 
 public class IfStatement implements GenericStatement {
 
-    GenericExpression expression;
-    GenericStatement thenStatement;
-    GenericStatement elseStatement;
+    private GenericExpression expression;
+    private GenericStatement thenStatement;
+    private GenericStatement elseStatement;
 
     public IfStatement(GenericExpression expression, GenericStatement thenStatement, GenericStatement elseStatement) {
         this.expression = expression;
@@ -17,6 +20,21 @@ public class IfStatement implements GenericStatement {
 
     @Override
     public ProgramState execute(ProgramState programState) throws Exception {
+        var symbolTable = programState.getSymbolTable();
+        var condition = this.expression.evaluate(symbolTable);
+
+        if (!condition.getType().equals(new BooleanType())){
+            throw new InvalidConditionExpressionException();
+        }
+
+        var executionStack = programState.getExecutionStack();
+
+        if (((BooleanValue)condition).getValue()){
+            executionStack.push(this.thenStatement);
+        } else {
+            executionStack.push(this.elseStatement);
+        }
+
         return programState;
     }
 

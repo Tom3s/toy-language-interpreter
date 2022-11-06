@@ -14,7 +14,7 @@ public class CDictionary<Key, Value> implements GenericDictionary<Key, Value> {
     }
 
     @Override
-    public void put(Key key, Value value) {
+    public void add(Key key, Value value) {
         this.map.put(key, value);
     }
 

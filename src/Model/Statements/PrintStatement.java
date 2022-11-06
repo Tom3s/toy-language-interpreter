@@ -4,7 +4,7 @@ import Model.ProgramState;
 import Model.Expressions.GenericExpression;
 
 public class PrintStatement implements GenericStatement {
-    GenericExpression expression;
+    private GenericExpression expression;
     
     public PrintStatement(GenericExpression expression) {
         this.expression = expression;
@@ -12,8 +12,10 @@ public class PrintStatement implements GenericStatement {
 
     @Override
     public ProgramState execute(ProgramState programState) throws Exception {
-        // TODO print execution
-        return null;
+        var out = programState.getOut();
+        var symbolTable = programState.getSymbolTable();
+        out.add(this.expression.evaluate(symbolTable));
+        return programState;
     }
 
     @Override

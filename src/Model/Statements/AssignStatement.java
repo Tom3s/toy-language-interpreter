@@ -9,8 +9,8 @@ import Model.Values.GenericValue;
 
 public class AssignStatement implements GenericStatement {
 
-    String id;
-    GenericExpression expression;
+    private String id;
+    private GenericExpression expression;
     
     public AssignStatement(String id, GenericExpression expression) {
         this.id = id;

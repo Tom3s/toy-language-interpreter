@@ -2,27 +2,33 @@ package Model.Expressions;
 
 import Model.ADT.GenericDictionary;
 import Model.InterpreterExceptions.DivisionByZeroException;
-import Model.InterpreterExceptions.InvalidOperandException;
+import Model.InterpreterExceptions.InvalidArithmeticOperandException;
 import Model.Types.IntegerType;
 import Model.Values.GenericValue;
 import Model.Values.IntegerValue;
 
 public class ArithmeticExpression implements GenericExpression {
 
-    GenericExpression leftOperand;
-    GenericExpression rightOperand;
-    ArithmeticOperation operation;
+    private GenericExpression leftOperand;
+    private GenericExpression rightOperand;
+    private ArithmeticOperation operation;
+    
+    public ArithmeticExpression(GenericExpression leftOperand, GenericExpression rightOperand, ArithmeticOperation operation) {
+        this.leftOperand = leftOperand;
+        this.rightOperand = rightOperand;
+        this.operation = operation;
+    }
 
     @Override
     public GenericValue evaluate(GenericDictionary<String, GenericValue> symbolTable) throws Exception {
         GenericValue leftValue = this.leftOperand.evaluate(symbolTable);
         if (!leftValue.getType().equals(new IntegerType())){
-            throw new InvalidOperandException("Left", leftValue.getType().toString());
+            throw new InvalidArithmeticOperandException("Left", leftValue.getType().toString());
         }
 
         GenericValue rightValue = this.rightOperand.evaluate(symbolTable);
         if (!rightValue.getType().equals(new IntegerType())){
-            throw new InvalidOperandException("Right", rightValue.getType().toString());
+            throw new InvalidArithmeticOperandException("Right", rightValue.getType().toString());
         }
 
         int leftNumber = ((IntegerValue)leftValue).getValue();
@@ -47,7 +53,7 @@ public class ArithmeticExpression implements GenericExpression {
 
     @Override
     public GenericExpression deepCopy() {
-        return null;
+        return new ArithmeticExpression(this.leftOperand.deepCopy(), this.rightOperand.deepCopy(), this.operation);
     }
     
 }

@@ -1,27 +1,26 @@
 package Model.Types;
 
+import Model.Values.BooleanValue;
 import Model.Values.GenericValue;
-import Model.Values.IntegerValue;
 
-public class IntegerType implements GenericType {
-
+public class BooleanType implements GenericType {
+    
     public boolean equals(Object other){
-        return (other instanceof IntegerType);
+        return (other instanceof BooleanType);
     }
 
     @Override
     public GenericType deepCopy() {
-        return new IntegerType();
+        return new BooleanType();
     }
 
     @Override
     public String toString() {
-        return "int";
+        return "bool";
     }
 
     @Override
     public GenericValue createValueOfType() {
-        return new IntegerValue();
+        return new BooleanValue();
     }
-    
 }

@@ -5,7 +5,11 @@ import Model.Types.IntegerType;
 
 public class IntegerValue implements GenericValue {
     
-    int value;
+    private int value;
+
+    public IntegerValue() {
+        this.value = 0;
+    }
 
     public IntegerValue(int value) {
         this.value = value;
