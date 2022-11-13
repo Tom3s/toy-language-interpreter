@@ -5,6 +5,7 @@ import Model.Values.GenericValue;
 
 public class BooleanType implements GenericType {
     
+    @Override
     public boolean equals(Object other){
         return (other instanceof BooleanType);
     }
@@ -20,7 +21,7 @@ public class BooleanType implements GenericType {
     }
 
     @Override
-    public GenericValue createValueOfType() {
+    public GenericValue defaultValue() {
         return new BooleanValue();
     }
 }

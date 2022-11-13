@@ -27,4 +27,6 @@ public class BooleanValue implements GenericValue {
     public String toString() {
         return this.value ? "true" : "false";
     }
+
+    
 }

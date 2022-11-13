@@ -22,11 +22,14 @@ public class ProgramController {
 
     public void allStep() throws Exception {
         var programState = this.repository.getCurrentProgramState();
+        this.repository.logProgramStateExecution();
         // var executionStack = programState.getExecutionStack();
         while (!programState.getExecutionStack().isEmpty()){
             this.oneStep(programState);
+
             // TODO display program state
-            System.out.println(programState);
+            // System.out.println(programState);
+            this.repository.logProgramStateExecution();
         }
     }
 }

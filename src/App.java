@@ -28,7 +28,7 @@ public class App {
         ProgramState state;
         state = new ProgramState(ex1);
 
-        ProgramController controller = new ProgramController(new ProgramStateRepository(state));
+        ProgramController controller = new ProgramController(new ProgramStateRepository(state, "logFile1.txt"));
 
         System.out.println("Example1\n");
 
@@ -47,7 +47,7 @@ public class App {
         
         state = new ProgramState(ex2);
 
-        controller = new ProgramController(new ProgramStateRepository(state));
+        controller = new ProgramController(new ProgramStateRepository(state, "logFile2.txt"));
         controller.allStep();
 
         System.out.println("\n\nExample3\n");
@@ -61,7 +61,7 @@ public class App {
     
         state = new ProgramState(ex3);
 
-        controller = new ProgramController(new ProgramStateRepository(state));
+        controller = new ProgramController(new ProgramStateRepository(state, "logFile3.txt"));
         controller.allStep();
     }
 }

@@ -21,7 +21,7 @@ public class VariableDeclarationStatement implements GenericStatement{
         if (symbolTable.containsKey(this.name)){
             throw new VariableAlreadyDeclaredException(this.name);
         }
-        GenericValue value = this.type.createValueOfType();
+        GenericValue value = this.type.defaultValue();
 
         symbolTable.add(this.name, value);
         return programState;
