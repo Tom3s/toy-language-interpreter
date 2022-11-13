@@ -1,6 +1,7 @@
 package Model.Types;
 
 import Model.Values.GenericValue;
+import Model.Values.StringValue;
 
 public class StringType implements GenericType{
 

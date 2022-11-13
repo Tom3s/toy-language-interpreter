@@ -29,14 +29,14 @@ public class ReadFileStatement implements GenericStatement {
 
         var evaluatedExpression = this.expression.evaluate(symbolTable);
         if (!evaluatedExpression.getType().equals(new StringType())){
-            throw new FileNameNotStringException(evaluatedExpression);
+            throw new FileNameNotStringException(evaluatedExpression.toString());
         }
 
         StringValue stringFileName = (StringValue)evaluatedExpression;
         var fileTable = programState.getFileTable();
         
         if (!fileTable.containsKey(stringFileName)){
-            throw new FileNotOpenException(stringFileName);
+            throw new FileNotOpenException(stringFileName.getValue());
         }
 
         var reader = (BufferedReader)fileTable.lookUp(stringFileName);

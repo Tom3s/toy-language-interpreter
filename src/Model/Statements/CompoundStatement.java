@@ -29,7 +29,7 @@ public class CompoundStatement implements GenericStatement {
 
     @Override
     public String toString() {
-        return String.format("(%s;%s)", this.firstStatement.toString(), this.secondStatement.toString());
+        return String.format("%s;\n%s", this.firstStatement.toString(), this.secondStatement.toString());
     }
 
 }

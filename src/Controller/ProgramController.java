@@ -26,8 +26,6 @@ public class ProgramController {
         // var executionStack = programState.getExecutionStack();
         while (!programState.getExecutionStack().isEmpty()){
             this.oneStep(programState);
-
-            // TODO display program state
             // System.out.println(programState);
             this.repository.logProgramStateExecution();
         }

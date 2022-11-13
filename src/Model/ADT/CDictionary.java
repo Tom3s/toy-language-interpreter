@@ -38,6 +38,7 @@ public class CDictionary<Key, Value> implements GenericDictionary<Key, Value> {
         this.map.put(key, newValue);
     }
 
+    
     //i implemented this again bc i didn't notice u already had it
     //it's not even well implemeneted lmao
     // u welcome :)
@@ -46,6 +47,12 @@ public class CDictionary<Key, Value> implements GenericDictionary<Key, Value> {
     //     return this.map.containsKey((key));
     // }
     // ty tho :P
+
+    @Override
+    public void remove(Key key) throws DictionaryNoEntryException {
+        if (!this.containsKey(key)) throw new DictionaryNoEntryException();
+        this.map.remove(key);        
+    }
 
     //for the MyStack class u need to add the toString method again, overriding from Object
     @Override
