@@ -39,5 +39,11 @@ public class CStack<DataType> implements GenericStack<DataType> {
         Collections.reverse(reversedList);
         return reversedList;
     }
+
+    @Override
+    public String toString() {
+        return this.stack.toString();
+    }
+    
     
 }

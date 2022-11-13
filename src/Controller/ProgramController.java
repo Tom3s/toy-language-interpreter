@@ -7,7 +7,11 @@ import Repository.GenericRepository;
 public class ProgramController {
     private GenericRepository repository;
 
-    ProgramState oneStep(ProgramState programState) throws Exception {
+    public ProgramController(GenericRepository repository) {
+        this.repository = repository;
+    }
+
+    public ProgramState oneStep(ProgramState programState) throws Exception {
         var executionStack = programState.getExecutionStack();
         if (executionStack.isEmpty()){
             throw new EmptyStackException();
@@ -16,12 +20,13 @@ public class ProgramController {
         return currentStatement.execute(programState);
     }
 
-    void allStep() throws Exception {
+    public void allStep() throws Exception {
         var programState = this.repository.getCurrentProgramState();
         // var executionStack = programState.getExecutionStack();
         while (!programState.getExecutionStack().isEmpty()){
             this.oneStep(programState);
             // TODO display program state
+            System.out.println(programState);
         }
     }
 }

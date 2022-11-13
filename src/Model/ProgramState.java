@@ -1,5 +1,8 @@
 package Model;
 
+import Model.ADT.CDictionary;
+import Model.ADT.CList;
+import Model.ADT.CStack;
 import Model.ADT.GenericDictionary;
 import Model.ADT.GenericList;
 import Model.ADT.GenericStack;
@@ -18,7 +21,15 @@ public class ProgramState {
         this.out = out;
         
         // implement deep copy
-        //this.originalProgram =  (Statement) clone(originalProgram);
+        this.originalProgram = originalProgram.deepCopy();
+        this.executionStack.push(originalProgram);
+    }
+
+    public ProgramState(GenericStatement originalProgram) {
+        this.executionStack = new CStack<GenericStatement>();
+        this.symbolTable = new CDictionary<String, GenericValue>();
+        this.out = new CList<GenericValue>();
+        this.originalProgram = originalProgram.deepCopy();
         this.executionStack.push(originalProgram);
     }
 
@@ -38,5 +49,11 @@ public class ProgramState {
         return this.originalProgram;
     }
 
+    @Override
+    public String toString() {
+        return "ProgramState [executionStack=" + executionStack.toString() + ",\n symbolTable=" + symbolTable.toString() + ",\n out=" + out.toString() + "]";
+    }
+
+    
     
 }

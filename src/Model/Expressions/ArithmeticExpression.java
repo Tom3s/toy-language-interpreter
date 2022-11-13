@@ -55,5 +55,28 @@ public class ArithmeticExpression implements GenericExpression {
     public GenericExpression deepCopy() {
         return new ArithmeticExpression(this.leftOperand.deepCopy(), this.rightOperand.deepCopy(), this.operation);
     }
+
+    @Override
+    public String toString() {
+        String ret = this.leftOperand.toString();
+        switch(this.operation){
+            case ADDITION:
+                ret += "+";
+                break;
+            case SUBTRACTION:
+                ret += "-";
+                break;
+            case MULTIPLICATION:
+                ret += "*";
+                break;
+            case DIVISION:
+                ret += "/";
+                break;
+            default:
+                break;
+        }
+        return ret + this.rightOperand.toString();
+    }
+    
     
 }
