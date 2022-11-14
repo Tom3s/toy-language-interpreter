@@ -28,4 +28,12 @@ public class IntegerValue implements GenericValue {
     public String toString() {
         return String.format("%d", this.value);
     }
+
+    @Override
+    public boolean equals(Object other) {
+        if (!(other instanceof IntegerValue)){
+            return false;
+        }
+        return this.value == ((IntegerValue)other).getValue();
+    }
 }

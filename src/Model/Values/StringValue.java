@@ -28,4 +28,12 @@ public class StringValue implements GenericValue {
     public String toString() {
         return String.format("\"%s\"", this.value);
     }
+
+    @Override
+    public boolean equals(Object other) {
+        if (!(other instanceof StringValue)){
+            return false;
+        }
+        return this.value == ((StringValue)other).getValue();
+    }
 }
