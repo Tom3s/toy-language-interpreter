@@ -1,7 +1,5 @@
 package Model.InterpreterExceptions;
 
-import Model.Values.GenericValue;
-
 public class FileNameNotStringException extends Exception {
     public FileNameNotStringException() {
         super("Given expression is not of type String!");        

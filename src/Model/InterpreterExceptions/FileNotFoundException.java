@@ -1,7 +1,5 @@
 package Model.InterpreterExceptions;
 
-import Model.Values.GenericValue;
-
 public class FileNotFoundException extends Exception {
 
     public FileNotFoundException() {
