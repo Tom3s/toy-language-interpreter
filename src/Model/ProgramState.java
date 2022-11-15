@@ -61,7 +61,7 @@ public class ProgramState {
 
     @Override
     public String toString() {
-        return "executionStack:" + executionStack.toString() + ",\nsymbolTable=" + symbolTable.toString() + ",\nout=" + out.toString() + "\n";
+        return "executionStack:" + executionStack.toString() + ",\nsymbolTable=" + symbolTable.toString() + ",\nout=" + out.toString() + ",\nFile Table = " + this.fileTable.toString() + "\n";
     }
 
 
