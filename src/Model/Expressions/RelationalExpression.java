@@ -1,6 +1,7 @@
 package Model.Expressions;
 
 import Model.ADT.GenericDictionary;
+import Model.ADT.GenericHeap;
 import Model.InterpreterExceptions.InvalidRelationalOperandException;
 import Model.Types.IntegerType;
 import Model.Values.BooleanValue;
@@ -19,9 +20,9 @@ public class RelationalExpression implements GenericExpression{
     }
     
     @Override
-    public GenericValue evaluate(GenericDictionary<String, GenericValue> symbolTable) throws Exception {
-        GenericValue leftValue = this.leftOperand.evaluate(symbolTable);
-        GenericValue rightValue = this.rightOperand.evaluate(symbolTable);
+    public GenericValue evaluate(GenericDictionary<String, GenericValue> symbolTable, GenericHeap<GenericValue> heap) throws Exception {
+        GenericValue leftValue = this.leftOperand.evaluate(symbolTable, heap);
+        GenericValue rightValue = this.rightOperand.evaluate(symbolTable, heap);
 
         if (this.operation == RelationalOperation.EQUAL || this.operation == RelationalOperation.NOT_EQUAL){
             boolean twoOperandsAreEqual = leftValue.equals(rightValue);
@@ -65,5 +66,17 @@ public class RelationalExpression implements GenericExpression{
         return new RelationalExpression(this.leftOperand.deepCopy(), this.rightOperand.deepCopy(), this.operation);
     }
 
+    @Override
+    public String toString() {
+        var stringOperation = switch (this.operation) {
+            case LESS -> "<";
+            case LESS_OR_EQUAL -> "<=";
+            case GREATER -> ">";
+            case GREATER_OR_EQUAL -> ">=";
+            case EQUAL -> "==";
+            case NOT_EQUAL -> "!=";
+        };
+        return String.format("(%s %s %s)", this.leftOperand.toString(), stringOperation, this.rightOperand.toString());
+    }
         
 }

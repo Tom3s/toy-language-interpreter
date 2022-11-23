@@ -21,7 +21,8 @@ public class IfStatement implements GenericStatement {
     @Override
     public ProgramState execute(ProgramState programState) throws Exception {
         var symbolTable = programState.getSymbolTable();
-        var condition = this.expression.evaluate(symbolTable);
+        var heap = programState.getHeap();
+        var condition = this.expression.evaluate(symbolTable, heap);
 
         if (!condition.getType().equals(new BooleanType())){
             throw new InvalidConditionExpressionException();

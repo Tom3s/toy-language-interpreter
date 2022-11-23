@@ -6,8 +6,8 @@ public class VariableTypeMismatchException extends Exception {
         super("Variable types do not match!");
     }
 
-    public VariableTypeMismatchException(String variable, String value){
-        super(String.format("Cannot assign value of %s to variable of type %s!", variable, value));
+    public VariableTypeMismatchException(String value, String type){
+        super(String.format("Cannot assign value of %s to variable of type %s!", value, type));
     }
     
 }

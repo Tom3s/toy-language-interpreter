@@ -27,7 +27,8 @@ public class ReadFileStatement implements GenericStatement {
             throw new VariableNotDeclaredException(this.variableName);
         }
 
-        var evaluatedExpression = this.expression.evaluate(symbolTable);
+        var heap = programState.getHeap();
+        var evaluatedExpression = this.expression.evaluate(symbolTable, heap);
         if (!evaluatedExpression.getType().equals(new StringType())){
             throw new FileNameNotStringException(evaluatedExpression.toString());
         }

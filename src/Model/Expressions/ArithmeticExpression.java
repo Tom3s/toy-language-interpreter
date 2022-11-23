@@ -1,6 +1,7 @@
 package Model.Expressions;
 
 import Model.ADT.GenericDictionary;
+import Model.ADT.GenericHeap;
 import Model.InterpreterExceptions.DivisionByZeroException;
 import Model.InterpreterExceptions.InvalidArithmeticOperandException;
 import Model.Types.IntegerType;
@@ -20,13 +21,13 @@ public class ArithmeticExpression implements GenericExpression {
     }
 
     @Override
-    public GenericValue evaluate(GenericDictionary<String, GenericValue> symbolTable) throws Exception {
-        GenericValue leftValue = this.leftOperand.evaluate(symbolTable);
+    public GenericValue evaluate(GenericDictionary<String, GenericValue> symbolTable, GenericHeap<GenericValue> heap) throws Exception {
+        GenericValue leftValue = this.leftOperand.evaluate(symbolTable, heap);
         if (!leftValue.getType().equals(new IntegerType())){
             throw new InvalidArithmeticOperandException("Left", leftValue.getType().toString());
         }
 
-        GenericValue rightValue = this.rightOperand.evaluate(symbolTable);
+        GenericValue rightValue = this.rightOperand.evaluate(symbolTable, heap);
         if (!rightValue.getType().equals(new IntegerType())){
             throw new InvalidArithmeticOperandException("Right", rightValue.getType().toString());
         }

@@ -1,6 +1,7 @@
 package Model.Expressions;
 
 import Model.ADT.GenericDictionary;
+import Model.ADT.GenericHeap;
 import Model.InterpreterExceptions.InvalidLogicalOperandException;
 import Model.Types.BooleanType;
 import Model.Values.BooleanValue;
@@ -19,13 +20,13 @@ public class LogicalExpression implements GenericExpression {
     }
 
     @Override
-    public GenericValue evaluate(GenericDictionary<String, GenericValue> symbolTable) throws Exception {
-        GenericValue leftValue = this.leftOperand.evaluate(symbolTable);
+    public GenericValue evaluate(GenericDictionary<String, GenericValue> symbolTable, GenericHeap<GenericValue> heap) throws Exception {
+        GenericValue leftValue = this.leftOperand.evaluate(symbolTable, heap);
         if (!leftValue.getType().equals(new BooleanType())){
             throw new InvalidLogicalOperandException("Left", leftValue.getType().toString());
         }
 
-        GenericValue rightValue = this.rightOperand.evaluate(symbolTable);
+        GenericValue rightValue = this.rightOperand.evaluate(symbolTable, heap);
         if (!rightValue.getType().equals(new BooleanType())){
             throw new InvalidLogicalOperandException("Right", rightValue.getType().toString());
         }
@@ -46,6 +47,15 @@ public class LogicalExpression implements GenericExpression {
     @Override
     public GenericExpression deepCopy() {
         return new LogicalExpression(this.leftOperand.deepCopy(), this.rightOperand.deepCopy(), this.operation);
+    }
+
+    @Override
+    public String toString() {
+        var stringOperation = switch (this.operation) {
+            case AND -> "and";
+            case OR -> "or";
+        };
+        return String.format("(%s %s %s)", this.leftOperand.toString(), stringOperation, this.rightOperand.toString());
     }
 
     

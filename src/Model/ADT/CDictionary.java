@@ -61,7 +61,13 @@ public class CDictionary<Key, Value> implements GenericDictionary<Key, Value> {
     }
     //i did a thing :D
 
+    @Override
+    public Map<Key, Value> getContent() {
+        return this.map;
+    }
+
 }
+
 
 
 

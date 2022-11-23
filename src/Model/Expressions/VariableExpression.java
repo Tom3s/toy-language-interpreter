@@ -1,6 +1,7 @@
 package Model.Expressions;
 
 import Model.ADT.GenericDictionary;
+import Model.ADT.GenericHeap;
 import Model.Values.GenericValue;
 
 public class VariableExpression implements GenericExpression {
@@ -17,7 +18,7 @@ public class VariableExpression implements GenericExpression {
     }
 
     @Override
-    public GenericValue evaluate(GenericDictionary<String, GenericValue> symbolTable) throws Exception {
+    public GenericValue evaluate(GenericDictionary<String, GenericValue> symbolTable, GenericHeap<GenericValue> heap) throws Exception {
         return symbolTable.lookUp(this.id);
     }
 

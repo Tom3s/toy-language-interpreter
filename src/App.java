@@ -5,19 +5,25 @@ import Menu.UI.TextMenu;
 import Model.ProgramState;
 import Model.Expressions.ArithmeticExpression;
 import Model.Expressions.ArithmeticOperation;
+import Model.Expressions.ReadHeapExpression;
+import Model.Expressions.RelationalExpression;
+import Model.Expressions.RelationalOperation;
 import Model.Expressions.ValueExpression;
 import Model.Expressions.VariableExpression;
 import Model.Statements.AssignStatement;
 import Model.Statements.CloseReadFileStatement;
 import Model.Statements.CompoundStatement;
 import Model.Statements.GenericStatement;
+import Model.Statements.HeapAllocationStatement;
 import Model.Statements.IfStatement;
 import Model.Statements.OpenReadFileStatement;
 import Model.Statements.PrintStatement;
 import Model.Statements.ReadFileStatement;
 import Model.Statements.VariableDeclarationStatement;
+import Model.Statements.WhileStatement;
 import Model.Types.BooleanType;
 import Model.Types.IntegerType;
+import Model.Types.ReferenceType;
 import Model.Types.StringType;
 import Model.Values.BooleanValue;
 import Model.Values.IntegerValue;
@@ -27,6 +33,7 @@ import Repository.ProgramStateRepository;
 public class App {
     public static void main(String[] args) throws Exception {
         /*Example 1*/
+        // int v; v=2; Print(v)
             GenericStatement exampleProgram1 = new CompoundStatement(
                     new VariableDeclarationStatement(new IntegerType(), "v"),
                     new CompoundStatement(new AssignStatement("v", new ValueExpression(new IntegerValue(2))),
@@ -38,6 +45,7 @@ public class App {
                     new ProgramStateRepository(exampleState1, "example1.log"));
         
         /*Example 2*/
+        // int a; int b; a=2+3*5; b=a+1; Print(b)
             GenericStatement exampleProgram2 = new CompoundStatement(
                     new VariableDeclarationStatement(new IntegerType(), "a"),
                     new CompoundStatement(new VariableDeclarationStatement(new IntegerType(), "b"),
@@ -60,6 +68,7 @@ public class App {
             ProgramController controller2 = new ProgramController(new ProgramStateRepository(exampleState2, "example2.log"));
         
         /*Example 3*/
+        // bool a; int v; a=true; (If a Then v=2 Else v=3); Print(v)
             GenericStatement exampleProgram3 = new CompoundStatement(
                     new VariableDeclarationStatement(new BooleanType(), "a"),
                     new CompoundStatement(new VariableDeclarationStatement(new IntegerType(), "v"),
@@ -75,6 +84,7 @@ public class App {
             ProgramController controller3 = new ProgramController(new ProgramStateRepository(exampleState3, "example3.log"));
         
         /*Example 4*/
+        // string varf; varf="test.in"; openRFile(varf); int varc; readFile(varf,varc); print(varc); readFile(varf,varc); print(varc); closeRFile(varf)
             GenericStatement exampleProgram4 = new CompoundStatement(
             new VariableDeclarationStatement(
             new StringType(), "varf"), new CompoundStatement(
@@ -91,6 +101,46 @@ public class App {
 
             ProgramController controller4 = new ProgramController(new ProgramStateRepository(exampleState4, "example4.log"));
         
+        /*Example 5*/
+        // int v; v=4; (while (v>0) print(v);v=v-1);print(v)
+        GenericStatement exampleProgram5 = new CompoundStatement(
+                new VariableDeclarationStatement(new IntegerType(), "v"),
+                new CompoundStatement(new AssignStatement("v", new ValueExpression(new IntegerValue(4))),
+                        new CompoundStatement(
+                                new WhileStatement(new RelationalExpression(new VariableExpression("v"),
+                                        new ValueExpression(new IntegerValue(0)), RelationalOperation.GREATER),
+                                        new CompoundStatement(new PrintStatement(new VariableExpression("v")),
+                                                new AssignStatement("v",
+                                                        new ArithmeticExpression(new VariableExpression("v"),
+                                                                new ValueExpression(new IntegerValue(1)),
+                                                                ArithmeticOperation.SUBTRACTION)))),
+                                new PrintStatement(new VariableExpression("v")))));
+
+        ProgramState exampleState5 = new ProgramState(exampleProgram5);
+
+        ProgramController controller5 = new ProgramController(new ProgramStateRepository(exampleState5, "example5.log"));
+        
+        /*Example 6*/
+        // Ref int v;new(v,20);Ref Ref int a; new(a,v); new(v,30);print(rH(rH(a)));
+        GenericStatement exampleProgram6 = new CompoundStatement(
+                new VariableDeclarationStatement(new ReferenceType(new IntegerType()), "v"),
+                new CompoundStatement(new HeapAllocationStatement("v", new ValueExpression(new IntegerValue(20))),
+                        new CompoundStatement(
+                                new VariableDeclarationStatement(
+                                        new ReferenceType(new ReferenceType(new IntegerType())), "a"),
+                                new CompoundStatement(
+                                        new HeapAllocationStatement("a", new VariableExpression("v")),
+                                        new CompoundStatement(
+                                                new HeapAllocationStatement("v",
+                                                        new ValueExpression(new IntegerValue(30))),
+                                                new PrintStatement(
+                                                        new ReadHeapExpression(new ReadHeapExpression(new VariableExpression("a")))))))));
+
+        ProgramState exampleState6 = new ProgramState(exampleProgram6);
+
+        ProgramController controller6 = new ProgramController(new ProgramStateRepository(exampleState6, "example6.log"));
+        
+
 
         TextMenu menu = new TextMenu();
         menu.addCommand(new ExitCommand("0", "Exit"));
@@ -98,6 +148,8 @@ public class App {
         menu.addCommand(new RunExampleCommand("2", exampleProgram2.toString(), controller2));
         menu.addCommand(new RunExampleCommand("3", exampleProgram3.toString(), controller3));
         menu.addCommand(new RunExampleCommand("4", exampleProgram4.toString(), controller4));
+        menu.addCommand(new RunExampleCommand("5", exampleProgram5.toString(), controller5));
+        menu.addCommand(new RunExampleCommand("6", exampleProgram6.toString(), controller6));
         menu.show();
     }
 }

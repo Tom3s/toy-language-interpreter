@@ -1,5 +1,7 @@
 package Model.ADT;
 
+import java.util.Map;
+
 import Model.InterpreterExceptions.DictionaryNoEntryException;
 
 public interface GenericDictionary<Key, Value> {
@@ -8,4 +10,5 @@ public interface GenericDictionary<Key, Value> {
     public void remove(Key key) throws DictionaryNoEntryException;
     public boolean containsKey(Key key);
     public void update(Key key, Value newValue) throws DictionaryNoEntryException;
+    public Map<Key, Value> getContent();
 }

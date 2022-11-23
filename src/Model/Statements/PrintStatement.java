@@ -14,7 +14,8 @@ public class PrintStatement implements GenericStatement {
     public ProgramState execute(ProgramState programState) throws Exception {
         var out = programState.getOut();
         var symbolTable = programState.getSymbolTable();
-        out.add(this.expression.evaluate(symbolTable));
+        var heap = programState.getHeap();
+        out.add(this.expression.evaluate(symbolTable, heap));
         return programState;
     }
 

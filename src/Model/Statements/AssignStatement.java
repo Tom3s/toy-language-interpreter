@@ -26,7 +26,8 @@ public class AssignStatement implements GenericStatement {
             throw new VariableNotDeclaredException(this.id);
         }
         
-        GenericValue value = this.expression.evaluate(symbolTable);
+        var heap = programState.getHeap();
+        GenericValue value = this.expression.evaluate(symbolTable, heap);
         GenericType typeId = symbolTable.lookUp(this.id).getType();
         if (!value.getType().equals(typeId)) {
             throw new VariableTypeMismatchException(value.getType().toString(), typeId.toString());
