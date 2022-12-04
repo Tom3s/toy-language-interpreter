@@ -38,7 +38,7 @@ public class CloseReadFileStatement implements GenericStatement {
 
         fileTable.remove(stringFileName);
 
-        return programState;
+        return null;
     }
 
     @Override

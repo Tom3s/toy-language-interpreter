@@ -27,7 +27,7 @@ public class ReferenceValue implements GenericValue {
 
     @Override
     public String toString() {
-        return "Ref " + this.locationType.toString();
+        return String.format("Ref %s{%s}", this.locationType.toString(), this.address);
     }
 
     

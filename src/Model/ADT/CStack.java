@@ -29,6 +29,14 @@ public class CStack<DataType> implements GenericStack<DataType> {
     }
 
     @Override
+    public DataType top() throws EmptyStackException {
+        if (this.isEmpty()){
+            throw new EmptyStackException();
+        }
+        return this.stack.peek();
+    }
+
+    @Override
     public boolean isEmpty() {
         return this.stack.empty();
     }
@@ -42,7 +50,7 @@ public class CStack<DataType> implements GenericStack<DataType> {
 
     @Override
     public String toString() {
-        return this.stack.toString();
+        return this.getReversed().toString();
     }
     
     

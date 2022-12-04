@@ -24,7 +24,7 @@ public class VariableDeclarationStatement implements GenericStatement{
         GenericValue value = this.type.defaultValue();
 
         symbolTable.add(this.name, value);
-        return programState;
+        return null;
     }
     
     @Override

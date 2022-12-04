@@ -36,7 +36,7 @@ public class IfStatement implements GenericStatement {
             executionStack.push(this.elseStatement);
         }
 
-        return programState;
+        return null;
     }
 
     @Override

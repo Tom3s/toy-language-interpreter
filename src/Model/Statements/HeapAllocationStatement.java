@@ -48,7 +48,7 @@ public class HeapAllocationStatement implements GenericStatement {
         
         symbolTable.update(this.variableName, new ReferenceValue(address, locationType));
 
-        return programState;
+        return null;
     }
 
     @Override

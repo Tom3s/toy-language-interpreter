@@ -46,7 +46,7 @@ public class OpenReadFileStatement implements GenericStatement {
 
         fileTable.add(stringFileName, bufferedReader);
 
-        return programState;
+        return null;
     }
     
     @Override

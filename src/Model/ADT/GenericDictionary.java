@@ -11,4 +11,6 @@ public interface GenericDictionary<Key, Value> {
     public boolean containsKey(Key key);
     public void update(Key key, Value newValue) throws DictionaryNoEntryException;
     public Map<Key, Value> getContent();
+    public GenericDictionary<Key, Value> deepCopy();
+    public void putAll(GenericDictionary<Key, Value> dictionary);
 }

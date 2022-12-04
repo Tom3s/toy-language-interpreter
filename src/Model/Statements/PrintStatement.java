@@ -16,7 +16,7 @@ public class PrintStatement implements GenericStatement {
         var symbolTable = programState.getSymbolTable();
         var heap = programState.getHeap();
         out.add(this.expression.evaluate(symbolTable, heap));
-        return programState;
+        return null;
     }
 
     @Override

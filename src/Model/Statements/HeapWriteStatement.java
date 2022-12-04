@@ -47,7 +47,7 @@ public class HeapWriteStatement implements GenericStatement {
             throw new VariableTypeMismatchException(evaluatedExpression.toString(), "Ref");
         }
         heap.update(address, evaluatedExpression);
-        return programState;
+        return null;
     }
 
     @Override

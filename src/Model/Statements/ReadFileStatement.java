@@ -46,7 +46,7 @@ public class ReadFileStatement implements GenericStatement {
 
         symbolTable.update(this.variableName, new IntegerValue(readInt));
 
-        return programState;
+        return null;
     }
     
     @Override

@@ -13,6 +13,10 @@ public class CDictionary<Key, Value> implements GenericDictionary<Key, Value> {
         this.map = new HashMap<Key, Value>();
     }
 
+    public CDictionary(Map<Key, Value> map){
+        this.map = map;
+    }
+
     @Override
     public void add(Key key, Value value) {
         this.map.put(key, value);
@@ -66,6 +70,19 @@ public class CDictionary<Key, Value> implements GenericDictionary<Key, Value> {
         return this.map;
     }
 
+    @Override
+    public GenericDictionary<Key, Value> deepCopy() {
+        var newMap = new HashMap<Key, Value>();
+        for (var entry : this.map.entrySet()){
+            newMap.put(entry.getKey(), entry.getValue());
+        }
+        return new CDictionary<Key, Value>(newMap);
+    }
+
+    @Override
+    public void putAll(GenericDictionary<Key, Value> dictionary) {
+        this.map.putAll(dictionary.getContent());
+    }
 }
 
 

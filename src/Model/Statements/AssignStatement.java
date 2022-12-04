@@ -33,7 +33,7 @@ public class AssignStatement implements GenericStatement {
             throw new VariableTypeMismatchException(value.getType().toString(), typeId.toString());
         }
         symbolTable.update(this.id, value);
-        return programState;
+        return null;
     }
 
     

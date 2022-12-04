@@ -33,7 +33,7 @@ public class WhileStatement implements GenericStatement {
             executionStack.push(this.statement);
         }
 
-        return programState;
+        return null;
     }
 
     @Override
