@@ -25,7 +25,7 @@ public class CHeap<Value> implements GenericHeap<Value> {
     public Value lookUp(int key) throws HeapNoEntryException{
         var value = this.map.get(key);
         if (value == null){
-            throw new HeapNoEntryException();
+            throw new HeapNoEntryException(key);
         }
         return value;
     }

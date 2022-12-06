@@ -2,6 +2,7 @@ package Controller;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -11,6 +12,8 @@ import java.util.stream.Collectors;
 
 
 import Model.ProgramState;
+import Model.ADT.GenericHeap;
+import Model.InterpreterExceptions.HeapNoEntryException;
 import Model.Values.GenericValue;
 import Model.Values.ReferenceValue;
 import Repository.GenericRepository;
@@ -96,16 +99,18 @@ public class ProgramController {
 
 
     public Map<Integer, GenericValue> conservativeGarbageCollector(List<ProgramState> programList){
-        Collection<GenericValue> listOfSymbols = new ArrayList<GenericValue>();
+        Collection<GenericValue> listOfSymbols = new HashSet<GenericValue>();
         programList.forEach(program -> {
             listOfSymbols.addAll(program.getSymbolTable().getContent().values());
         });
 
-        var symbolTableAddresses = getAddressFromSymbolTable(listOfSymbols);
+        var heap = programList.get(0).getHeap();
 
-        var heap = programList.get(0).getHeap().getContent();
+        var symbolTableAddresses = getAddressFromSymbolTable(listOfSymbols, heap);
 
-        return heap.entrySet().stream()
+        var heapMap = heap.getContent();
+
+        return heapMap.entrySet().stream()
         .filter(e->isAddressInSymbolTables(e.getKey(), symbolTableAddresses))
         .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
@@ -115,12 +120,31 @@ public class ProgramController {
         return symbolTableAddresses.contains(address);
     }
 
-    public List<Integer> getAddressFromSymbolTable(Collection<GenericValue> symbolTableValues) {
+    public List<Integer> getAddressFromSymbolTable(Collection<GenericValue> symbolTableValues, GenericHeap<GenericValue> heap) {
         return symbolTableValues.stream()
         .filter(v -> v instanceof ReferenceValue)
-        .map(v -> {
+        .flatMap(v -> {
+            var listOfAddresses = new ArrayList<Integer>();
             ReferenceValue v1 = (ReferenceValue) v;
-            return v1.getAddress();
+            var address = v1.getAddress();
+            listOfAddresses.add(address);
+
+            if (address == 0) {
+                return listOfAddresses.stream();
+            }
+
+            try {
+                while (heap.lookUp(address) instanceof ReferenceValue) {
+                    address = ((ReferenceValue) heap.lookUp(address)).getAddress();
+                    listOfAddresses.add(address);
+                    if (address == 0) {
+                        return listOfAddresses.stream();
+                    }
+                }
+            } catch (HeapNoEntryException e) {
+                System.out.println(e.getMessage());
+            }
+            return listOfAddresses.stream();
         })
         .collect(Collectors.toList());
     }

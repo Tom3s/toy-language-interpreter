@@ -43,6 +43,6 @@ public class WhileStatement implements GenericStatement {
 
     @Override
     public String toString() {
-        return String.format("(while %s \n%s;)", this.condition.toString(), this.statement.toString());
+        return String.format("(while %s %s;)", this.condition.toString(), this.statement.toString());
     }
 }
