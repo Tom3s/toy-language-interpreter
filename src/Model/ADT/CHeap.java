@@ -21,6 +21,11 @@ public class CHeap<Value> implements GenericHeap<Value> {
         return hash;
     }
 
+    /**
+     * @param key the key to look up
+     * @throws HeapNoEntryException if key is not in the heap
+     * @return the value associated with the key
+     */
     @Override
     public Value lookUp(int key) throws HeapNoEntryException{
         var value = this.map.get(key);

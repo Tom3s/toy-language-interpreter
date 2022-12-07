@@ -9,7 +9,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
-
+import java.util.stream.Stream;
 
 import Model.ProgramState;
 import Model.ADT.GenericHeap;
@@ -24,15 +24,13 @@ public class ProgramController {
 
     public ProgramController(GenericRepository repository) {
         this.repository = repository;
+        this.executor = Executors.newFixedThreadPool(2);
     }
 
     public void oneStepForAllPrograms(List<ProgramState> programList) throws Exception {
         programList.forEach(program -> {
             try {
-                // if (!(program.getExecutionStack().top() instanceof CompoundStatement))
-                // {
-                    this.repository.logProgramStateExecution(program);
-                // }
+                this.repository.logProgramStateExecution(program);
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
@@ -64,10 +62,7 @@ public class ProgramController {
         
         programList.forEach(program -> {
             try {
-                // if ((program.getExecutionStack().isEmpty()))
-                // {
-                    this.repository.logProgramStateExecution(program);
-                // }
+                this.repository.logProgramStateExecution(program);
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
@@ -77,7 +72,6 @@ public class ProgramController {
     }
 
     public void allStep() throws Exception {
-        executor = Executors.newFixedThreadPool(2);
         List<ProgramState> programList = removeCompletedPrograms(repository.getProgramStateList());
         var heap = programList.get(0).getHeap();
         while (programList.size() > 0) {
@@ -106,21 +100,16 @@ public class ProgramController {
 
         var heap = programList.get(0).getHeap();
 
-        var symbolTableAddresses = getAddressFromSymbolTable(listOfSymbols, heap);
+        var addressesWithReference = getAddressFromSymbolTableAndHeap(listOfSymbols, heap);
 
         var heapMap = heap.getContent();
 
         return heapMap.entrySet().stream()
-        .filter(e->isAddressInSymbolTables(e.getKey(), symbolTableAddresses))
+        .filter(e-> addressesWithReference.contains(e.getKey()))
         .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
-    
 
-    private boolean isAddressInSymbolTables(int address, List<Integer> symbolTableAddresses) {
-        return symbolTableAddresses.contains(address);
-    }
-
-    public List<Integer> getAddressFromSymbolTable(Collection<GenericValue> symbolTableValues, GenericHeap<GenericValue> heap) {
+    public List<Integer> getAddressFromSymbolTableAndHeap(Collection<GenericValue> symbolTableValues, GenericHeap<GenericValue> heap) {
         return symbolTableValues.stream()
         .filter(v -> v instanceof ReferenceValue)
         .flatMap(v -> {
@@ -130,22 +119,27 @@ public class ProgramController {
             listOfAddresses.add(address);
 
             if (address == 0) {
+                // Reference Value not initialized
                 return listOfAddresses.stream();
             }
 
-            try {
-                while (heap.lookUp(address) instanceof ReferenceValue) {
-                    address = ((ReferenceValue) heap.lookUp(address)).getAddress();
-                    listOfAddresses.add(address);
-                    if (address == 0) {
-                        return listOfAddresses.stream();
-                    }
-                }
-            } catch (HeapNoEntryException e) {
-                System.out.println(e.getMessage());
-            }
-            return listOfAddresses.stream();
+            return getNestedAddressesFromHeap(heap, listOfAddresses, address);
         })
         .collect(Collectors.toList());
+    }
+
+    private Stream<? extends Integer> getNestedAddressesFromHeap(GenericHeap<GenericValue> heap, ArrayList<Integer> listOfAddresses, int address) {
+        try {
+            while (heap.lookUp(address) instanceof ReferenceValue) {
+                address = ((ReferenceValue) heap.lookUp(address)).getAddress();
+                if (heap.containsKey(address) == false) {
+                    return listOfAddresses.stream();
+                }
+                listOfAddresses.add(address);
+            }
+        } catch (HeapNoEntryException e) {
+            System.out.println(e.getMessage());
+        }
+        return listOfAddresses.stream();
     }
 }
