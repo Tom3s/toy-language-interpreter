@@ -1,9 +1,11 @@
 package Model.Statements;
 
 import Model.ProgramState;
+import Model.ADT.GenericDictionary;
 import Model.Expressions.GenericExpression;
 import Model.InterpreterExceptions.InvalidConditionExpressionException;
 import Model.Types.BooleanType;
+import Model.Types.GenericType;
 import Model.Values.BooleanValue;
 
 public class WhileStatement implements GenericStatement {
@@ -34,6 +36,18 @@ public class WhileStatement implements GenericStatement {
         }
 
         return null;
+    }
+    
+    @Override
+    public GenericDictionary<String, GenericType> typeCheck(GenericDictionary<String, GenericType> typeEnvironment) throws Exception {
+        GenericType typeExpression = this.condition.typeCheck(typeEnvironment);
+
+        if (!typeExpression.equals(new BooleanType())) {
+            throw new InvalidConditionExpressionException(this.condition.toString());
+        }
+        
+        this.statement.typeCheck(typeEnvironment.deepCopy());
+        return typeEnvironment;
     }
 
     @Override

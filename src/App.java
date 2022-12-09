@@ -4,6 +4,7 @@ import Menu.Commands.ExitCommand;
 import Menu.Commands.RunExampleCommand;
 import Menu.UI.TextMenu;
 import Model.ProgramState;
+import Model.ADT.CDictionary;
 import Model.Expressions.ArithmeticExpression;
 import Model.Expressions.ArithmeticOperation;
 import Model.Expressions.ReadHeapExpression;
@@ -25,6 +26,7 @@ import Model.Statements.ReadFileStatement;
 import Model.Statements.VariableDeclarationStatement;
 import Model.Statements.WhileStatement;
 import Model.Types.BooleanType;
+import Model.Types.GenericType;
 import Model.Types.IntegerType;
 import Model.Types.ReferenceType;
 import Model.Types.StringType;
@@ -41,6 +43,8 @@ GenericStatement exampleProgram1 = new CompoundStatement(
         new VariableDeclarationStatement(new IntegerType(), "v"),new CompoundStatement(
         new AssignStatement("v", new ValueExpression(new IntegerValue(2))),
         new PrintStatement(new VariableExpression("v"))));
+
+        exampleProgram1.typeCheck(new CDictionary<String, GenericType>());
 
         ProgramState exampleState1 = new ProgramState(exampleProgram1);
 
@@ -77,6 +81,7 @@ GenericStatement exampleProgram2 =new CompoundStatement(
         new VariableExpression(
         "b"))))));
 
+        exampleProgram2.typeCheck(new CDictionary<String, GenericType>());
         ProgramState exampleState2 = new ProgramState(exampleProgram2);
 
         ProgramController controller2 = new ProgramController(
@@ -104,6 +109,7 @@ GenericStatement exampleProgram3 =new CompoundStatement(
         new VariableExpression(
         "v"))))));
 
+        exampleProgram3.typeCheck(new CDictionary<String, GenericType>());
         ProgramState exampleState3 = new ProgramState(exampleProgram3);
 
         ProgramController controller3 = new ProgramController(
@@ -140,6 +146,7 @@ GenericStatement exampleProgram4 =new CompoundStatement(
         new VariableExpression(
         "varf"))))))))));
 
+        exampleProgram4.typeCheck(new CDictionary<String, GenericType>());
         ProgramState exampleState4 = new ProgramState(exampleProgram4);
 
         ProgramController controller4 = new ProgramController(
@@ -168,6 +175,7 @@ GenericStatement exampleProgram5 =new CompoundStatement(
         ArithmeticOperation.SUBTRACTION)))),
         new PrintStatement(new VariableExpression("v")))));
 
+        exampleProgram5.typeCheck(new CDictionary<String, GenericType>());
         ProgramState exampleState5 = new ProgramState(exampleProgram5);
 
         ProgramController controller5 = new ProgramController(
@@ -197,6 +205,7 @@ GenericStatement exampleProgram6 =new CompoundStatement(
         new VariableExpression(
         "a")))))))));
 
+        exampleProgram6.typeCheck(new CDictionary<String, GenericType>());
         ProgramState exampleState6 = new ProgramState(exampleProgram6);
 
         ProgramController controller6 = new ProgramController(
@@ -243,6 +252,7 @@ new VariableDeclarationStatement(new IntegerType(), "v"),new CompoundStatement(
             new VariableExpression(
             "a")))))))));
 
+        exampleProgram7.typeCheck(new CDictionary<String, GenericType>());
         ProgramState exampleState7 = new ProgramState(exampleProgram7);
 
         ProgramController controller7 = new ProgramController(

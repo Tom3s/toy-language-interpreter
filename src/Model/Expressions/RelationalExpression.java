@@ -3,6 +3,7 @@ package Model.Expressions;
 import Model.ADT.GenericDictionary;
 import Model.ADT.GenericHeap;
 import Model.InterpreterExceptions.InvalidRelationalOperandException;
+import Model.Types.BooleanType;
 import Model.Types.GenericType;
 import Model.Types.IntegerType;
 import Model.Values.BooleanValue;
@@ -76,7 +77,7 @@ public class RelationalExpression implements GenericExpression{
             throw new InvalidRelationalOperandException(this.rightOperand.toString(), rightType.toString());
         }
 
-        return new IntegerType();
+        return new BooleanType();
     }
 
     @Override

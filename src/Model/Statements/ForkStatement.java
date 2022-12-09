@@ -2,6 +2,8 @@ package Model.Statements;
 
 import Model.ProgramState;
 import Model.ADT.CStack;
+import Model.ADT.GenericDictionary;
+import Model.Types.GenericType;
 
 public class ForkStatement implements GenericStatement {
     private GenericStatement statement;
@@ -22,7 +24,11 @@ public class ForkStatement implements GenericStatement {
         );
     }
 
-    
+    @Override
+    public GenericDictionary<String, GenericType> typeCheck(GenericDictionary<String, GenericType> typeEnvironment) throws Exception {
+        this.statement.typeCheck(typeEnvironment.deepCopy());
+        return typeEnvironment;
+    }
 
     @Override
     public GenericStatement deepCopy() {

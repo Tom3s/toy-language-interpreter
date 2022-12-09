@@ -1,7 +1,9 @@
 package Model.Statements;
 
 import Model.ProgramState;
+import Model.ADT.GenericDictionary;
 import Model.Expressions.GenericExpression;
+import Model.Types.GenericType;
 
 public class PrintStatement implements GenericStatement {
     private GenericExpression expression;
@@ -17,6 +19,12 @@ public class PrintStatement implements GenericStatement {
         var heap = programState.getHeap();
         out.add(this.expression.evaluate(symbolTable, heap));
         return null;
+    }
+
+    @Override
+    public GenericDictionary<String, GenericType> typeCheck(GenericDictionary<String, GenericType> typeEnvironment) throws Exception {
+        this.expression.typeCheck(typeEnvironment);
+        return typeEnvironment;
     }
 
     @Override

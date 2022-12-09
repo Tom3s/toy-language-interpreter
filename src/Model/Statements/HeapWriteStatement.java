@@ -1,11 +1,13 @@
 package Model.Statements;
 
 import Model.ProgramState;
+import Model.ADT.GenericDictionary;
 import Model.Expressions.GenericExpression;
 import Model.InterpreterExceptions.HeapNoEntryException;
 import Model.InterpreterExceptions.NotReferencTypeException;
 import Model.InterpreterExceptions.VariableNotDeclaredException;
 import Model.InterpreterExceptions.VariableTypeMismatchException;
+import Model.Types.GenericType;
 import Model.Types.ReferenceType;
 import Model.Values.ReferenceValue;
 
@@ -48,6 +50,16 @@ public class HeapWriteStatement implements GenericStatement {
         }
         heap.update(address, evaluatedExpression);
         return null;
+    }
+
+    @Override
+    public GenericDictionary<String, GenericType> typeCheck(GenericDictionary<String, GenericType> typeEnvironment) throws Exception {
+        GenericType typeVariable = typeEnvironment.lookUp(this.variableName);
+        GenericType typeExpression = this.expression.typeCheck(typeEnvironment);
+        if (!typeVariable.equals(new ReferenceType(typeExpression))){
+            throw new VariableTypeMismatchException(this.variableName, "Ref");
+        }
+        return typeEnvironment;
     }
 
     @Override

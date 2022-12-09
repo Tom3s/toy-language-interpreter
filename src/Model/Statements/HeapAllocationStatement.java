@@ -1,10 +1,12 @@
 package Model.Statements;
 
 import Model.ProgramState;
+import Model.ADT.GenericDictionary;
 import Model.Expressions.GenericExpression;
 import Model.InterpreterExceptions.HeapAllocationNotReferenceTypeException;
 import Model.InterpreterExceptions.VariableNotDeclaredException;
 import Model.InterpreterExceptions.VariableTypeMismatchException;
+import Model.Types.GenericType;
 import Model.Types.ReferenceType;
 import Model.Values.ReferenceValue;
 
@@ -49,6 +51,18 @@ public class HeapAllocationStatement implements GenericStatement {
         symbolTable.update(this.variableName, new ReferenceValue(address, locationType));
 
         return null;
+    }
+    
+    @Override
+    public GenericDictionary<String, GenericType> typeCheck(GenericDictionary<String, GenericType> typeEnvironment) throws Exception {
+        GenericType typeVariable = typeEnvironment.lookUp(this.variableName);
+        GenericType typeExpression = this.expression.typeCheck(typeEnvironment);
+        
+        if (!typeVariable.equals(new ReferenceType(typeExpression))) {
+            throw new VariableTypeMismatchException(typeVariable.toString(), typeExpression.toString());
+        }
+
+        return typeEnvironment;
     }
 
     @Override

@@ -3,10 +3,14 @@ package Model.Statements;
 import java.io.BufferedReader;
 
 import Model.ProgramState;
+import Model.ADT.GenericDictionary;
 import Model.Expressions.GenericExpression;
 import Model.InterpreterExceptions.FileNameNotStringException;
 import Model.InterpreterExceptions.FileNotOpenException;
 import Model.InterpreterExceptions.VariableNotDeclaredException;
+import Model.InterpreterExceptions.VariableTypeMismatchException;
+import Model.Types.GenericType;
+import Model.Types.IntegerType;
 import Model.Types.StringType;
 import Model.Values.IntegerValue;
 import Model.Values.StringValue;
@@ -49,6 +53,15 @@ public class ReadFileStatement implements GenericStatement {
         return null;
     }
     
+    @Override
+    public GenericDictionary<String, GenericType> typeCheck(GenericDictionary<String, GenericType> typeEnvironment) throws Exception {
+        var typeVariable = typeEnvironment.lookUp(this.variableName);
+        if (!typeVariable.equals(new IntegerType())){
+            throw new VariableTypeMismatchException(typeVariable.toString(), new IntegerType().toString());
+        }
+        return typeEnvironment;
+    }
+
     @Override
     public GenericStatement deepCopy() {
         return new ReadFileStatement(this.expression.deepCopy(), new String(this.variableName));

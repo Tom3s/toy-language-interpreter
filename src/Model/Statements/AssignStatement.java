@@ -1,6 +1,7 @@
 package Model.Statements;
 
 import Model.ProgramState;
+import Model.ADT.GenericDictionary;
 import Model.Expressions.GenericExpression;
 import Model.InterpreterExceptions.VariableNotDeclaredException;
 import Model.InterpreterExceptions.VariableTypeMismatchException;
@@ -35,9 +36,19 @@ public class AssignStatement implements GenericStatement {
         symbolTable.update(this.id, value);
         return null;
     }
+    
+    @Override
+    public GenericDictionary<String, GenericType> typeCheck(GenericDictionary<String, GenericType> typeEnvironment) throws Exception {
+        GenericType typeVariable = typeEnvironment.lookUp(this.id);
+        GenericType typeExpression = this.expression.typeCheck(typeEnvironment);
+        
+        if (!typeVariable.equals(typeExpression)) {
+            throw new VariableTypeMismatchException(typeVariable.toString(), typeExpression.toString());
+        }
 
-    
-    
+        return typeEnvironment;
+    }
+
     @Override
     public GenericStatement deepCopy() {
         return new AssignStatement(new String(this.id), this.expression.deepCopy());

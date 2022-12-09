@@ -1,9 +1,11 @@
 package Model.Statements;
 
 import Model.ProgramState;
+import Model.ADT.GenericDictionary;
 import Model.Expressions.GenericExpression;
 import Model.InterpreterExceptions.FileNameNotStringException;
 import Model.InterpreterExceptions.FileNotOpenException;
+import Model.Types.GenericType;
 import Model.Types.StringType;
 import Model.Values.StringValue;
 
@@ -39,6 +41,15 @@ public class CloseReadFileStatement implements GenericStatement {
         fileTable.remove(stringFileName);
 
         return null;
+    }
+
+    @Override
+    public GenericDictionary<String, GenericType> typeCheck(GenericDictionary<String, GenericType> typeEnvironment) throws Exception {
+        GenericType typeExpression = this.expression.typeCheck(typeEnvironment);
+        if (!typeExpression.equals(new StringType())) {
+            throw new FileNameNotStringException(typeExpression.toString());
+        }
+        return typeEnvironment;
     }
 
     @Override

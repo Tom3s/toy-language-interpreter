@@ -1,6 +1,8 @@
 package Model.Statements;
 
 import Model.ProgramState;
+import Model.ADT.GenericDictionary;
+import Model.Types.GenericType;
 
 public class CompoundStatement implements GenericStatement {
 
@@ -20,7 +22,10 @@ public class CompoundStatement implements GenericStatement {
         return null;
     }
 
-    
+    @Override
+    public GenericDictionary<String, GenericType> typeCheck(GenericDictionary<String, GenericType> typeEnvironment) throws Exception {
+        return this.secondStatement.typeCheck(this.firstStatement.typeCheck(typeEnvironment));
+    }
 
     @Override
     public GenericStatement deepCopy() {
