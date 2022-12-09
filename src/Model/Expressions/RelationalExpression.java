@@ -3,6 +3,7 @@ package Model.Expressions;
 import Model.ADT.GenericDictionary;
 import Model.ADT.GenericHeap;
 import Model.InterpreterExceptions.InvalidRelationalOperandException;
+import Model.Types.GenericType;
 import Model.Types.IntegerType;
 import Model.Values.BooleanValue;
 import Model.Values.GenericValue;
@@ -61,6 +62,23 @@ public class RelationalExpression implements GenericExpression{
         }
     }
     
+    
+
+    @Override
+    public GenericType typeCheck(GenericDictionary<String, GenericType> typeEnvironment) throws Exception {
+        GenericType leftType = this.leftOperand.typeCheck(typeEnvironment);
+        if (!leftType.equals(new IntegerType())){
+            throw new InvalidRelationalOperandException(this.leftOperand.toString(), leftType.toString());
+        }
+        
+        GenericType rightType = this.rightOperand.typeCheck(typeEnvironment);
+        if (!rightType.equals(new IntegerType())){
+            throw new InvalidRelationalOperandException(this.rightOperand.toString(), rightType.toString());
+        }
+
+        return new IntegerType();
+    }
+
     @Override
     public GenericExpression deepCopy() {
         return new RelationalExpression(this.leftOperand.deepCopy(), this.rightOperand.deepCopy(), this.operation);

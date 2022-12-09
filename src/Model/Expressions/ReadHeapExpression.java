@@ -4,6 +4,7 @@ import Model.ADT.GenericDictionary;
 import Model.ADT.GenericHeap;
 import Model.InterpreterExceptions.HeapNoEntryException;
 import Model.InterpreterExceptions.NotReferencTypeException;
+import Model.Types.GenericType;
 import Model.Types.ReferenceType;
 import Model.Values.GenericValue;
 import Model.Values.ReferenceValue;
@@ -31,6 +32,18 @@ public class ReadHeapExpression implements GenericExpression{
         }
 
         return heap.lookUp(address);
+    }
+
+    @Override
+    public GenericType typeCheck(GenericDictionary<String, GenericType> typeEnvironment) throws Exception {
+        var typeExpression = this.expression.typeCheck(typeEnvironment);
+
+        if (!(typeExpression instanceof ReferenceType)){
+            throw new NotReferencTypeException(this.expression.toString());
+        }
+
+        var referenceType = (ReferenceType)typeExpression;
+        return referenceType.getInner();
     }
 
     @Override

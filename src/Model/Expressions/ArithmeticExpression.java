@@ -4,6 +4,7 @@ import Model.ADT.GenericDictionary;
 import Model.ADT.GenericHeap;
 import Model.InterpreterExceptions.DivisionByZeroException;
 import Model.InterpreterExceptions.InvalidArithmeticOperandException;
+import Model.Types.GenericType;
 import Model.Types.IntegerType;
 import Model.Values.GenericValue;
 import Model.Values.IntegerValue;
@@ -50,6 +51,23 @@ public class ArithmeticExpression implements GenericExpression {
             default:
                 throw new Exception("Unknown exception occured");
         }
+    }
+
+    
+
+    @Override
+    public GenericType typeCheck(GenericDictionary<String, GenericType> typeEnvironment) throws Exception {
+        var leftType = this.leftOperand.typeCheck(typeEnvironment);
+        if (!leftType.equals(new IntegerType())){
+            throw new InvalidArithmeticOperandException("Left", leftType.toString());
+        }
+
+        var rightType = this.rightOperand.typeCheck(typeEnvironment);
+        if (!rightType.equals(new IntegerType())){
+            throw new InvalidArithmeticOperandException("Right", rightType.toString());
+        }
+
+        return new IntegerType();
     }
 
     @Override
