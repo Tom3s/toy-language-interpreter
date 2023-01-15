@@ -1,5 +1,7 @@
 package Menu.Commands;
 
+import Controller.ProgramController;
+
 public abstract class GenericCommand {
     private String key; 
     private String description;
@@ -18,4 +20,6 @@ public abstract class GenericCommand {
     public String getDescription() {
         return this.description;
     }
+
+    public abstract ProgramController getController();
 }

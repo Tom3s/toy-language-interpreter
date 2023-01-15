@@ -46,7 +46,7 @@ public class IfStatement implements GenericStatement {
         GenericType typeExpression = this.expression.typeCheck(typeEnvironment);
 
         if (!typeExpression.equals(new BooleanType())) {
-            throw new InvalidConditionExpressionException();
+            throw new InvalidConditionExpressionException(this.expression.toString());
         }
         
         this.thenStatement.typeCheck(typeEnvironment.deepCopy());

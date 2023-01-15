@@ -37,4 +37,9 @@ public class CList<DataType> implements GenericList<DataType> {
     public String toString() {
         return this.list.toString();
     }
+
+    @Override
+    public List<DataType> getContent() {
+        return this.list;
+    }
 }

@@ -18,4 +18,10 @@ public class RunExampleCommand extends GenericCommand {
             System.out.println(e.getMessage());
         }
     }
+
+    public ProgramController getController() {
+        return controller;
+    }
+
+    
 }

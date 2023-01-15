@@ -13,7 +13,7 @@ import Model.InterpreterExceptions.NoLogFilePathException;
 public class ProgramStateRepository implements GenericRepository {
 
     private List<ProgramState> programStateList;
-    //private ProgramState state;
+    private ProgramState originalState;
     private String logFilePath;
 
     public ProgramStateRepository() {
@@ -24,6 +24,7 @@ public class ProgramStateRepository implements GenericRepository {
     public ProgramStateRepository(ProgramState state) {
         this();
         this.programStateList.add(state);
+        this.originalState = state;
         this.logFilePath = null;
     }
     
@@ -56,5 +57,20 @@ public class ProgramStateRepository implements GenericRepository {
 
     public void setProgramStateList(List<ProgramState> programStateList) {
         this.programStateList = programStateList;
+    }
+
+    @Override
+    public void restartExecution() {
+        this.programStateList = new ArrayList<ProgramState>();
+        this.originalState.reset();
+        this.programStateList.add(this.originalState);
+
+        try {
+            PrintWriter writer = new PrintWriter(logFilePath);
+            writer.print("");
+            writer.close();
+        } catch (FileNotFoundException e) {
+            // System.out.println("File not found");
+        }
     }
 }

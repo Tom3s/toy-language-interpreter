@@ -85,6 +85,25 @@ public class ProgramController {
         repository.setProgramStateList(programList);
     }
 
+    public void runOneStep() throws Exception {
+        List<ProgramState> programList = removeCompletedPrograms(repository.getProgramStateList());
+        var heap = programList.get(0).getHeap();
+        if (programList.size() > 0) {
+            heap.setContent(
+                conservativeGarbageCollector(programList)
+            );
+            oneStepForAllPrograms(programList);
+            programList = removeCompletedPrograms(repository.getProgramStateList());
+        } else {
+            executor.shutdownNow();
+            repository.setProgramStateList(programList);
+        }
+    }
+
+    public List<ProgramState> getProgramStates(){
+        return repository.getProgramStateList();
+    }
+
     public List<ProgramState> removeCompletedPrograms(List<ProgramState> programStateList) throws Exception {
         return programStateList.stream()
         .filter(ProgramState::isNotCompleted)
@@ -141,5 +160,10 @@ public class ProgramController {
             System.out.println(e.getMessage());
         }
         return listOfAddresses.stream();
+    }
+    
+    public void restartExecution() {
+        this.repository.restartExecution();
+        this.executor = Executors.newFixedThreadPool(2);
     }
 }

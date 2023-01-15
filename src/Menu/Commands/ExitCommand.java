@@ -10,5 +10,10 @@ public class ExitCommand extends GenericCommand {
     public void execute() {
         System.exit(0);
     }
+
+    @Override
+    public ProgramController getController() {
+        return null;
+    }
     
 }

@@ -83,6 +83,10 @@ public class ProgramState {
         return this.originalProgram;
     }
 
+    public int getProgramId() {
+        return this.programId;
+    }
+
     public Boolean isNotCompleted() {
         return !this.executionStack.isEmpty();
     }
@@ -99,6 +103,16 @@ public class ProgramState {
         }
         var currentStatement = this.executionStack.pop();
         return currentStatement.execute(this);
+    }
+
+    public void reset() {
+        this.executionStack = new CStack<GenericStatement>();
+        this.symbolTable = new CDictionary<String, GenericValue>();
+        this.out = new CList<GenericValue>();
+        this.fileTable = new CDictionary<StringValue, BufferedReader>();
+        this.heap = new CHeap<GenericValue>();
+        this.programId = getNextStaticId();
+        this.executionStack.push(originalProgram);
     }
 
     @Override
