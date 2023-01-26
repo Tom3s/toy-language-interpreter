@@ -17,6 +17,9 @@ public class CHeap<Value> implements GenericHeap<Value> {
     public int add(Value value) {
         int hash = value.hashCode();
         int key = Integer.valueOf(hash);
+        while (this.map.containsKey(key)){
+            key = Integer.valueOf(key + 1).hashCode();
+        }
         this.map.put(key, value);
         return hash;
     }

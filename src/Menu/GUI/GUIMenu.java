@@ -17,6 +17,8 @@ import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -177,22 +179,32 @@ public class GUIMenu extends Application {
                 
 
 
-                VBox layout = new VBox(10);
-                layout.getChildren().add(nrStatesLabel);
-                layout.getChildren().add(nrStatesField);
-                layout.getChildren().add(programStateIDsLabel);
-                layout.getChildren().add(programStateIDs);
-                layout.getChildren().add(heapLabel);
-                layout.getChildren().add(heapTable);
-                layout.getChildren().add(outLabel);
-                layout.getChildren().add(out);
-                layout.getChildren().add(fileTableLabel);
-                layout.getChildren().add(fileTable);
-                layout.getChildren().add(symbolTableLabel);
-                layout.getChildren().add(symbolTableView);
-                layout.getChildren().add(exeStackLabel);
-                layout.getChildren().add(exeStackView);
-                layout.getChildren().add(programButton);
+                HBox layout = new HBox(10);
+                VBox leftLayout = new VBox(10);
+                HBox.setHgrow(leftLayout, Priority.ALWAYS);
+                VBox rightLayout = new VBox(10);
+                HBox.setHgrow(rightLayout, Priority.ALWAYS);
+                leftLayout.getChildren().add(nrStatesLabel);
+                leftLayout.getChildren().add(nrStatesField);
+                leftLayout.getChildren().add(programStateIDsLabel);
+                leftLayout.getChildren().add(programStateIDs);
+                leftLayout.getChildren().add(heapLabel);
+                leftLayout.getChildren().add(heapTable);
+                leftLayout.getChildren().add(outLabel);
+                leftLayout.getChildren().add(out);
+                leftLayout.autosize();
+
+                rightLayout.getChildren().add(fileTableLabel);
+                rightLayout.getChildren().add(fileTable);
+                rightLayout.getChildren().add(symbolTableLabel);
+                rightLayout.getChildren().add(symbolTableView);
+                rightLayout.getChildren().add(exeStackLabel);
+                rightLayout.getChildren().add(exeStackView);
+                rightLayout.getChildren().add(programButton);
+                rightLayout.autosize();
+
+                layout.getChildren().add(leftLayout);
+                layout.getChildren().add(rightLayout);
 
                 layout.autosize();
 
@@ -209,6 +221,7 @@ public class GUIMenu extends Application {
             );
 
             VBox layout = new VBox(10);
+            VBox.setVgrow(listView, Priority.ALWAYS);
             layout.autosize();
             layout.getChildren().addAll(listView, button);
 
