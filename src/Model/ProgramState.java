@@ -10,7 +10,9 @@ import Model.ADT.CStack;
 import Model.ADT.GenericDictionary;
 import Model.ADT.GenericHeap;
 import Model.ADT.GenericList;
+import Model.ADT.GenericLock;
 import Model.ADT.GenericStack;
+import Model.ADT.LockDictionary;
 import Model.Statements.GenericStatement;
 import Model.Values.GenericValue;
 import Model.Values.StringValue;
@@ -21,6 +23,7 @@ public class ProgramState {
     private GenericList<GenericValue> out;
     private GenericDictionary<StringValue, BufferedReader> fileTable;
     private GenericHeap<GenericValue> heap;
+    private GenericLock<Integer> lockTable;
     private GenericStatement originalProgram;
     private int programId;
     private static int currentStaticId = -1;
@@ -31,6 +34,7 @@ public class ProgramState {
             GenericList<GenericValue> out, 
             GenericDictionary<StringValue, BufferedReader> fileTable, 
             GenericHeap<GenericValue> heap,
+            GenericLock<Integer> lockTable,
             GenericStatement originalProgram
         ) {
         this.executionStack = executionStack;
@@ -38,6 +42,7 @@ public class ProgramState {
         this.out = out;
         this.fileTable = fileTable;
         this.heap = heap;
+        this.lockTable = lockTable;
         this.programId = getNextStaticId();
 
         this.originalProgram = originalProgram.deepCopy();
@@ -50,6 +55,7 @@ public class ProgramState {
         this.out = new CList<GenericValue>();
         this.fileTable = new CDictionary<StringValue, BufferedReader>();
         this.heap = new CHeap<GenericValue>();
+        this.lockTable = new LockDictionary<Integer>();
         this.programId = getNextStaticId();
         this.originalProgram = originalProgram.deepCopy();
         this.executionStack.push(originalProgram);
@@ -77,6 +83,10 @@ public class ProgramState {
 
     public GenericHeap<GenericValue> getHeap() {
         return this.heap;
+    }
+
+    public GenericLock<Integer> getLockTable() {
+        return this.lockTable;
     }
 
     public GenericStatement getOriginalProgram() {
@@ -111,6 +121,7 @@ public class ProgramState {
         this.out = new CList<GenericValue>();
         this.fileTable = new CDictionary<StringValue, BufferedReader>();
         this.heap = new CHeap<GenericValue>();
+        this.lockTable = new LockDictionary<Integer>();
         this.programId = getNextStaticId();
         this.executionStack.push(originalProgram);
     }
@@ -123,7 +134,8 @@ public class ProgramState {
         ",\nsymbolTable=" + this.symbolTable.toString() + 
         ",\nout=" + this.out.toString() + 
         ",\nfileTable=" + this.fileTable.toString() + 
-        ",\nheap=" + this.heap.toString() + "\n";
+        ",\nheap=" + this.heap.toString() + 
+        ",\nlockTable=" + this.lockTable.toString() +"\n";
     }
 
 

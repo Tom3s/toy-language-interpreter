@@ -81,7 +81,7 @@ public class ForStatement implements GenericStatement {
 
     @Override
     public String toString() {
-        return String.format("for(%s=%s;%s<%s;%s=%s) %s;", 
+        return String.format("for(%s=%s;%s<%s;%s=%s) %s", 
             this.variableName, 
             this.initialValue.toString(), 
             this.variableName, 
