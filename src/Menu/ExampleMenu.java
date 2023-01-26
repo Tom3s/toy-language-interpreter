@@ -16,6 +16,7 @@ import Model.Expressions.VariableExpression;
 import Model.Statements.AssignStatement;
 import Model.Statements.CloseReadFileStatement;
 import Model.Statements.CompoundStatement;
+import Model.Statements.ForStatement;
 import Model.Statements.ForkStatement;
 import Model.Statements.GenericStatement;
 import Model.Statements.HeapAllocationStatement;
@@ -307,6 +308,40 @@ new VariableDeclarationStatement(new IntegerType(), "v"),new CompoundStatement(
         ProgramController controller8 = new ProgramController(
                 new ProgramStateRepository(exampleState8, "example8.log"));
         
+        /* Example 9 */
+        // Ref int a; new(a,20); (for(v=0;v<3;v=v+1) fork(print(v);v=v*rh(a))); print(rh(a))
+
+        GenericStatement exampleProgram9 = new CompoundStatement(
+                new VariableDeclarationStatement(new ReferenceType(new IntegerType()), "a"), new CompoundStatement(
+                new HeapAllocationStatement("a", new ValueExpression(new IntegerValue(20))), new CompoundStatement(
+                new ForStatement(
+                        "v",
+                        new ValueExpression(new IntegerValue(0)),
+                        new ValueExpression(new IntegerValue(3)),
+                        new ArithmeticExpression(
+                                new VariableExpression("v"),
+                                new ValueExpression(new IntegerValue(1)),
+                                ArithmeticOperation.ADDITION), 
+                                new ForkStatement( new CompoundStatement(
+                                        new PrintStatement(new VariableExpression("v")),
+                                        new AssignStatement(
+                                                "v",
+                                                new ArithmeticExpression(
+                                                new VariableExpression("v"),
+                                                new ReadHeapExpression(new VariableExpression("a")),
+                                                ArithmeticOperation.MULTIPLICATION)
+                                        )
+                        ))
+                ),
+                new PrintStatement(new ReadHeapExpression(new VariableExpression("a")))
+        )));
+
+        exampleProgram9.typeCheck(new CDictionary<String, GenericType>());
+
+        ProgramState exampleState9 = new ProgramState(exampleProgram9);
+
+        ProgramController controller9 = new ProgramController(
+                new ProgramStateRepository(exampleState9, "example9.log"));
 
 
 
@@ -320,6 +355,7 @@ new VariableDeclarationStatement(new IntegerType(), "v"),new CompoundStatement(
         this.menu.addCommand(new RunExampleCommand("6", exampleProgram6.toString(), controller6));
         this.menu.addCommand(new RunExampleCommand("7", exampleProgram7.toString(), controller7));
         this.menu.addCommand(new RunExampleCommand("8", exampleProgram8.toString(), controller8));
+        this.menu.addCommand(new RunExampleCommand("9", exampleProgram9.toString(), controller9));
         
     }
 

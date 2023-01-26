@@ -1,5 +1,7 @@
 package Menu.Commands;
 
+import Controller.ProgramController;
+
 public class ExitCommand extends GenericCommand {
 
     public ExitCommand(String key, String description) {
