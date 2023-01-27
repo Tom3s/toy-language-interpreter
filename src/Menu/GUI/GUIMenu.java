@@ -226,8 +226,6 @@ public class GUIMenu extends Application {
                 programStage.show();
 
                 programStage.onCloseRequestProperty().set(e2 -> {
-                    // System.out.println("closing");
-                    controller.restartExecution();
                     programStage.close();
                 });
                 }
