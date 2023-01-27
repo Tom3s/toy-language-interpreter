@@ -21,7 +21,7 @@ public class CHeap<Value> implements GenericHeap<Value> {
             key = Integer.valueOf(key + 1).hashCode();
         }
         this.map.put(key, value);
-        return hash;
+        return key;
     }
 
     /**

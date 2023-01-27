@@ -71,6 +71,8 @@ public class ForStatement implements GenericStatement {
             throw new VariableTypeMismatchException(this.initialValue.toString(), this.variableName);
         }
 
+        typeEnvironment.add(this.variableName, new IntegerType());
+
         var continueConditionType = this.continueValue.typeCheck(typeEnvironment);
         if (!continueConditionType.equals(new IntegerType())){
             throw new InvalidConditionExpressionException(this.continueValue.toString());
@@ -79,6 +81,9 @@ public class ForStatement implements GenericStatement {
         if (!postLoopExpressionType.equals(new IntegerType())){
             throw new VariableTypeMismatchException(this.postLoopExpression.toString(), this.variableName);
         }
+
+        this.statement.typeCheck(typeEnvironment.deepCopy());
+
         return typeEnvironment;
     }
     

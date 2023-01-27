@@ -20,6 +20,7 @@ public class ForkStatement implements GenericStatement {
             state.getOut(),
             state.getFileTable(),
             state.getHeap(),
+            state.getLockTable(),
             this.statement
         );
     }

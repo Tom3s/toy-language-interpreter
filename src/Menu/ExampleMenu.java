@@ -1,7 +1,6 @@
 package Menu;
 
 import Controller.ProgramController;
-import Menu.Commands.ExitCommand;
 import Menu.Commands.RunExampleCommand;
 import Menu.GUI.Menu;
 import Model.ProgramState;
@@ -16,14 +15,19 @@ import Model.Expressions.VariableExpression;
 import Model.Statements.AssignStatement;
 import Model.Statements.CloseReadFileStatement;
 import Model.Statements.CompoundStatement;
+import Model.Statements.ForStatement;
 import Model.Statements.ForkStatement;
 import Model.Statements.GenericStatement;
 import Model.Statements.HeapAllocationStatement;
 import Model.Statements.HeapWriteStatement;
 import Model.Statements.IfStatement;
+import Model.Statements.LockStatement;
+import Model.Statements.NewLockStatement;
+import Model.Statements.NoOperationStatement;
 import Model.Statements.OpenReadFileStatement;
 import Model.Statements.PrintStatement;
 import Model.Statements.ReadFileStatement;
+import Model.Statements.UnlockStatement;
 import Model.Statements.VariableDeclarationStatement;
 import Model.Statements.WhileStatement;
 import Model.Types.BooleanType;
@@ -307,6 +311,107 @@ new VariableDeclarationStatement(new IntegerType(), "v"),new CompoundStatement(
         ProgramController controller8 = new ProgramController(
                 new ProgramStateRepository(exampleState8, "example8.log"));
         
+                /* Example 9 */
+        // Ref int a; new(a,20); (for(v=0;v<3;v=v+1) fork(print(v);v=v*rh(a))); print(rh(a))
+
+        GenericStatement exampleProgram9 = new CompoundStatement(
+                new VariableDeclarationStatement(new ReferenceType(new IntegerType()), "a"), new CompoundStatement(
+                new HeapAllocationStatement("a", new ValueExpression(new IntegerValue(20))), new CompoundStatement(
+                new ForStatement(
+                        "v",
+                        new ValueExpression(new IntegerValue(0)),
+                        new ValueExpression(new IntegerValue(3)),
+                        new ArithmeticExpression(
+                                new VariableExpression("v"),
+                                new ValueExpression(new IntegerValue(1)),
+                                ArithmeticOperation.ADDITION), 
+                                new ForkStatement( new CompoundStatement(
+                                        new PrintStatement(new VariableExpression("v")),
+                                        new AssignStatement(
+                                                "v",
+                                                new ArithmeticExpression(
+                                                new VariableExpression("v"),
+                                                new ReadHeapExpression(new VariableExpression("a")),
+                                                ArithmeticOperation.MULTIPLICATION)
+                                        )
+                        ))
+                ),
+                new PrintStatement(new ReadHeapExpression(new VariableExpression("a")))
+        )));
+
+        exampleProgram9.typeCheck(new CDictionary<String, GenericType>());
+
+        ProgramState exampleState9 = new ProgramState(exampleProgram9);
+
+        ProgramController controller9 = new ProgramController(
+                new ProgramStateRepository(exampleState9, "example9.log"));
+
+
+
+
+        /* Example 10 */
+        // Ref int v1; Ref int v2; int x; int q;  new(v1,20);new(v2,30);newLock(x); fork(  fork(  lock(x);wh(v1,rh(v1)-1);unlock(x)  );   lock(x);wh(v1,rh(v1)*10);unlock(x) );newLock(q); fork(  fork(lock(q);wh(v2,rh(v2)+5);unlock(q));  lock(q);wh(v2,rh(v2)*10);unlock(q)); nop;nop;nop;nop; lock(x); print(rh(v1)); unlock(x); lock(q); print(rh(v2)); unlock(q); 
+
+        GenericStatement exampleProgram10 = new CompoundStatement(
+        new VariableDeclarationStatement(new ReferenceType(new IntegerType()), "v1"), new CompoundStatement(
+        new VariableDeclarationStatement(new ReferenceType(new IntegerType()), "v2"), new CompoundStatement(
+        new VariableDeclarationStatement(new IntegerType(), "x"), new CompoundStatement(
+        new VariableDeclarationStatement(new IntegerType(), "q"), new CompoundStatement(
+        new HeapAllocationStatement("v1", new ValueExpression(new IntegerValue(20))), new CompoundStatement(
+        new HeapAllocationStatement("v2", new ValueExpression(new IntegerValue(30))), new CompoundStatement(
+        new NewLockStatement("x"), new CompoundStatement(
+        new ForkStatement(new CompoundStatement(
+                new ForkStatement(new CompoundStatement(
+                        new LockStatement("x"), new CompoundStatement(
+                        new HeapWriteStatement("v1", new ArithmeticExpression(
+                                new ReadHeapExpression(new VariableExpression("v1")),
+                                new ValueExpression(new IntegerValue(1)),
+                                ArithmeticOperation.SUBTRACTION)), 
+                        new UnlockStatement("x")))), new CompoundStatement(
+
+                new LockStatement("x"), new CompoundStatement(
+                new HeapWriteStatement("v1", new ArithmeticExpression(
+                        new ReadHeapExpression(new VariableExpression("v1")),
+                        new ValueExpression(new IntegerValue(10)),
+                        ArithmeticOperation.MULTIPLICATION)),
+                new UnlockStatement("x"))))), new CompoundStatement(
+        new NewLockStatement("q"), new CompoundStatement(
+        new ForkStatement(new CompoundStatement(
+                new ForkStatement(new CompoundStatement(
+                        new LockStatement("q"), new CompoundStatement(
+                        new HeapWriteStatement("v2", new ArithmeticExpression(
+                                new ReadHeapExpression(new VariableExpression("v2")),
+                                new ValueExpression(new IntegerValue(5)),
+                                ArithmeticOperation.ADDITION)),
+                        new UnlockStatement("q")))), new CompoundStatement(
+                new LockStatement("q"), new CompoundStatement(
+                new HeapWriteStatement("v2", new ArithmeticExpression(
+                        new ReadHeapExpression(new VariableExpression("v2")),
+                        new ValueExpression(new IntegerValue(10)),
+                        ArithmeticOperation.MULTIPLICATION)),
+                new UnlockStatement("q"))))), new CompoundStatement(
+        new NoOperationStatement(), new CompoundStatement(
+        new NoOperationStatement(), new CompoundStatement(
+        new NoOperationStatement(), new CompoundStatement(
+        new NoOperationStatement(), new CompoundStatement(
+        new LockStatement("x"), new CompoundStatement(
+        new PrintStatement(new ReadHeapExpression(new VariableExpression("v1"))), new CompoundStatement(
+        new UnlockStatement("x"), new CompoundStatement(
+        new LockStatement("q"), new CompoundStatement(
+        new PrintStatement(new ReadHeapExpression(new VariableExpression("v2"))),
+        new UnlockStatement("q")
+        )))))))))))))))))));
+        
+
+
+        exampleProgram10.typeCheck(new CDictionary<String, GenericType>());
+        
+        ProgramState exampleState10 = new ProgramState(exampleProgram10);
+
+        ProgramController controller10 = new ProgramController(
+                new ProgramStateRepository(exampleState10, "example10.log"));
+        
+                
 
 
 
@@ -320,6 +425,8 @@ new VariableDeclarationStatement(new IntegerType(), "v"),new CompoundStatement(
         this.menu.addCommand(new RunExampleCommand("6", exampleProgram6.toString(), controller6));
         this.menu.addCommand(new RunExampleCommand("7", exampleProgram7.toString(), controller7));
         this.menu.addCommand(new RunExampleCommand("8", exampleProgram8.toString(), controller8));
+        this.menu.addCommand(new RunExampleCommand("9", exampleProgram9.toString(), controller9));
+        this.menu.addCommand(new RunExampleCommand("10", exampleProgram10.toString(), controller10));
         
     }
 

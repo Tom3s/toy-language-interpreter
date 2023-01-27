@@ -2,10 +2,8 @@ package Menu.GUI;
 
 import java.util.HashMap;
 
-import Controller.ProgramController;
 import Menu.ExampleMenu;
 import Model.ProgramState;
-import Model.Values.GenericValue;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,10 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -54,6 +49,7 @@ public class GUIMenu extends Application {
                 var selected = listView.getSelectionModel().getSelectedItem();
                 var command = exampleMenu.getCommands().values().stream().filter(x -> x.getDescription().equals(selected)).findFirst().get();
                 var controller = command.getController();
+                controller.restartExecution();
                 // controller.restartExecution();
                 Stage programStage = new Stage();
                 programStage.setTitle("Program Window");
@@ -97,6 +93,14 @@ public class GUIMenu extends Application {
                 Label exeStackLabel = new Label("Execution Stack: ");
                 var exeStackView = new javafx.scene.control.ListView<String>();
 
+                Label lockTableLabel = new Label("Lock Table: ");
+                var lockTableView = new javafx.scene.control.TableView<javafx.util.Pair<Integer, Integer>>();
+                TableColumn<javafx.util.Pair<Integer, Integer>, Integer> lockTableLocationColumn = new TableColumn<>("Location");
+                lockTableLocationColumn.setCellValueFactory(new javafx.scene.control.cell.PropertyValueFactory<>("Key"));
+                TableColumn<javafx.util.Pair<Integer, Integer>, Integer> lockTableValueColumn = new TableColumn<>("Value");
+                lockTableValueColumn.setCellValueFactory(new javafx.scene.control.cell.PropertyValueFactory<>("Value"));
+                lockTableView.getColumns().addAll(lockTableLocationColumn, lockTableValueColumn);
+
                 var programButton = new Button("Run one step");
                 
                 cLambda updateTexts = () -> {
@@ -127,6 +131,13 @@ public class GUIMenu extends Application {
                     programStateIDs.getItems().clear();
                     programStateIDs.getItems().addAll(programStateIDsList);
                     
+                    var lockTableList = new HashMap<>(programState.getLockTable().getContent());
+                    lockTableView.getItems().clear();
+                    for (var entry : lockTableList.entrySet()) {
+                        var key = entry.getKey();
+                        var value = entry.getValue();
+                        lockTableView.getItems().add(new javafx.util.Pair<Integer, Integer>(key, value));
+                    }
                     // if no item is selected, select first one                    
                 };
 
@@ -164,7 +175,7 @@ public class GUIMenu extends Application {
                         updateTexts.run();
                         updateSymbolTable.run();
                     } catch (Exception e1) {
-                        controller.restartExecution();
+                        
                         programStage.close();
                         // System.out.println(e1.getMessage());
                     }
@@ -200,6 +211,8 @@ public class GUIMenu extends Application {
                 rightLayout.getChildren().add(symbolTableView);
                 rightLayout.getChildren().add(exeStackLabel);
                 rightLayout.getChildren().add(exeStackView);
+                rightLayout.getChildren().add(lockTableLabel);
+                rightLayout.getChildren().add(lockTableView);
                 rightLayout.getChildren().add(programButton);
                 rightLayout.autosize();
 
